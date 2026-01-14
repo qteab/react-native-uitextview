@@ -118,6 +118,11 @@ using namespace facebook::react;
     _textView.selectable = newViewProps.selectable;
   }
 
+  if (oldViewProps.selectionColor != newViewProps.selectionColor) {
+    UIColor *color = RCTUIColorFromSharedColor(newViewProps.selectionColor);
+     _textView.tintColor = color; 
+  }
+
   if (oldViewProps.allowFontScaling != newViewProps.allowFontScaling) {
     if (@available(iOS 11.0, *)) {
       _textView.adjustsFontForContentSizeCategory = newViewProps.allowFontScaling;

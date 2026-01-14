@@ -1,5 +1,5 @@
 import codegenNativeComponent from 'react-native/Libraries/Utilities/codegenNativeComponent'
-import type {ViewProps} from 'react-native'
+import type {ColorValue, ViewProps} from 'react-native'
 import type {
   BubblingEventHandler,
   Int32,
@@ -21,6 +21,7 @@ interface NativeProps extends ViewProps {
   allowFontScaling?: WithDefault<boolean, true>
   ellipsizeMode?: WithDefault<EllipsizeMode, 'tail'>
   selectable?: boolean
+  selectionColor?: ColorValue;
   onTextLayout?: BubblingEventHandler<TextLayoutEvent>
 }
 
