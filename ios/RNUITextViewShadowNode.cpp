@@ -143,7 +143,7 @@ Size RNUITextViewShadowNode::measureContent(
       layoutConstraints
     );
 
-    Float epsilon = 0.100; 
+    Float epsilon = 1.000; 
 
     return Size{
       (std::ceil((measurement.size.width + epsilon) * layoutContext.pointScaleFactor) / layoutContext.pointScaleFactor),
