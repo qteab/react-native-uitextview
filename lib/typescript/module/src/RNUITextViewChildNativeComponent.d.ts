@@ -8,7 +8,6 @@ type TextDecorationStyle = 'solid' | 'double' | 'dotted' | 'dashed';
 export type NativeFontWeight = 'normal' | 'bold' | 'ultraLight' | 'light' | 'medium' | 'semibold' | 'heavy';
 type FontStyle = 'normal' | 'italic';
 type TextAlign = 'auto' | 'left' | 'right' | 'center' | 'justify';
-type TextTransform = 'none' | 'capitalize' | 'uppercase' | 'lowercase';
 interface NativeProps extends ViewProps {
     text: string;
     color?: ColorValue;
@@ -21,7 +20,6 @@ interface NativeProps extends ViewProps {
     textDecorationLine?: WithDefault<TextDecorationLine, 'none'>;
     textDecorationStyle?: WithDefault<TextDecorationStyle, 'solid'>;
     textDecorationColor?: ColorValue;
-    textTransform?: WithDefault<TextTransform, 'none'>;
     textAlign?: WithDefault<TextAlign, 'auto'>;
     shadowRadius?: WithDefault<Float, 0>;
     onPress?: BubblingEventHandler<TargetedEvent>;

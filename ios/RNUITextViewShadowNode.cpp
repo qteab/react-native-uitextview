@@ -20,6 +20,8 @@ Size RNUITextViewShadowNode::measureContent(
     const auto &baseProps = getConcreteProps();
     auto paragraphAttributes = ParagraphAttributes{};
     paragraphAttributes.maximumNumberOfLines = baseProps.numberOfLines;
+    
+    // Mapping Ellipsize Mode
     if (baseProps.ellipsizeMode == RNUITextViewEllipsizeMode::Head) {
       paragraphAttributes.ellipsizeMode = EllipsizeMode::Head;
     } else if (baseProps.ellipsizeMode == RNUITextViewEllipsizeMode::Middle) {
@@ -41,6 +43,7 @@ Size RNUITextViewShadowNode::measureContent(
     
     auto baseAttributedString = AttributedString{};
     const auto &children = getChildren();
+    
     for (size_t i = 0; i < children.size(); i++) {
       const auto child = children[i].get();
       if (auto textViewChild = dynamic_cast<const RNUITextViewChildShadowNode *>(child)) {
@@ -53,32 +56,25 @@ Size RNUITextViewShadowNode::measureContent(
         textAttributes.fontSize = props.fontSize * fontSizeMultiplier;
         textAttributes.lineHeight = props.lineHeight * fontSizeMultiplier;
         textAttributes.foregroundColor = props.color;
+        
+        // Since TextAttributes doesn't have baselineOffset, we store it in textShadowRadius
+        // which is also a Float. We will retrieve this in Objective-C.
+        textAttributes.textShadowRadius = props.baselineOffset; 
+        
         textAttributes.textShadowColor = props.shadowColor;
         textAttributes.textShadowOffset = props.shadowOffset;
-        textAttributes.textShadowRadius = props.shadowRadius;
         textAttributes.letterSpacing = props.letterSpacing;
-
-        textAttributes.baselineOffset = props.baselineOffset;
-
-        if (props.textTransform == RNUITextViewChildTextTransform::Uppercase) {
-          textAttributes.textTransform = TextTransform::Uppercase;
-        } else if (props.textTransform == RNUITextViewChildTextTransform::Lowercase) {
-          textAttributes.textTransform = TextTransform::Lowercase;
-        } else if (props.textTransform == RNUITextViewChildTextTransform::Capitalize) {
-          textAttributes.textTransform = TextTransform::Capitalize;
-        } else {
-          textAttributes.textTransform = TextTransform::None;
-        }
-        
         textAttributes.textDecorationColor = props.textDecorationColor;
         textAttributes.fontFamily = props.fontFamily;
         
+        // Font Style
         if (props.fontStyle == RNUITextViewChildFontStyle::Italic) {
           textAttributes.fontStyle = FontStyle::Italic;
         } else {
           textAttributes.fontStyle = FontStyle::Normal;
         }
         
+        // Font Weight
         if (props.fontWeight == RNUITextViewChildFontWeight::Bold) {
           textAttributes.fontWeight = FontWeight::Bold;
         } else if (props.fontWeight == RNUITextViewChildFontWeight::UltraLight) {
@@ -95,6 +91,7 @@ Size RNUITextViewShadowNode::measureContent(
           textAttributes.fontWeight = FontWeight::Regular;
         }
                 
+        // Text Decoration
         if (props.textDecorationLine == RNUITextViewChildTextDecorationLine::LineThrough) {
           textAttributes.textDecorationLineType = TextDecorationLineType::Strikethrough;
         } else if (props.textDecorationLine == RNUITextViewChildTextDecorationLine::Underline) {
@@ -109,10 +106,11 @@ Size RNUITextViewShadowNode::measureContent(
           textAttributes.textDecorationStyle = TextDecorationStyle::Dotted;
         } else if (props.textDecorationStyle == RNUITextViewChildTextDecorationStyle::Dashed) {
           textAttributes.textDecorationStyle = TextDecorationStyle::Dashed;
-        } else if (props.textDecorationStyle == RNUITextViewChildTextDecorationStyle::Dotted) {
+        } else if (props.textDecorationStyle == RNUITextViewChildTextDecorationStyle::Double) {
           textAttributes.textDecorationStyle = TextDecorationStyle::Double;
         }
         
+        // Alignment
         if (props.textAlign == RNUITextViewChildTextAlign::Left) {
           textAttributes.alignment = TextAlignment::Left;
         } else if (props.textAlign == RNUITextViewChildTextAlign::Right) {
@@ -125,8 +123,6 @@ Size RNUITextViewShadowNode::measureContent(
           textAttributes.alignment = TextAlignment::Natural;
         }
         
-        textAttributes.backgroundColor = props.backgroundColor;
-
         fragment.string = props.text;
         fragment.textAttributes = textAttributes;
 

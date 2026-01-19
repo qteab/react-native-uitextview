@@ -81,24 +81,28 @@ using namespace facebook::react;
 
   const auto &attributedStringBox = _state->getData().attributedString;
   
-  // Convert to iOS string (standard conversion drops baselineOffset)
+  // 2. Convert to iOS string
   NSAttributedString *baseString = RCTNSAttributedStringFromAttributedString(attributedStringBox);
   NSMutableAttributedString *mutableString = [baseString mutableCopy];
 
-  // Manually re-apply baselineOffset from C++ fragments
   int currentIndex = 0;
   for (const auto &fragment : attributedStringBox.getFragments()) {
-      Float offset = fragment.textAttributes.baselineOffset;
       
-      // Calculate fragment length
+      // We used 'textShadowRadius' in C++ to store the baseline offset
+      Float smuggledOffset = fragment.textAttributes.textShadowRadius;
+      
       NSString *fragmentString = [NSString stringWithUTF8String:fragment.string.c_str()];
       NSInteger length = fragmentString.length;
       
-      // Apply offset if it exists
-      if (offset != 0 && (currentIndex + length <= mutableString.length)) {
+      // Apply the offset if it exists
+      if (smuggledOffset != 0 && (currentIndex + length <= mutableString.length)) {
           [mutableString addAttribute:NSBaselineOffsetAttributeName
-                                value:@(offset)
+                                value:@(smuggledOffset)
                                 range:NSMakeRange(currentIndex, length)];
+          
+          if (!fragment.textAttributes.textShadowColor) {
+             [mutableString removeAttribute:NSShadowAttributeName range:NSMakeRange(currentIndex, length)];
+          }
       }
       
       currentIndex += length;
@@ -107,7 +111,6 @@ using namespace facebook::react;
   _textView.attributedText = mutableString;
   _textView.frame = _view.frame;
 
-  // Existing layout calculation logic
   const auto lines = new std::vector<std::string>();
   [_textView.layoutManager enumerateLineFragmentsForGlyphRange:NSMakeRange(0, mutableString.string.length) usingBlock:^(CGRect rect,
                                                                                               CGRect usedRect,
