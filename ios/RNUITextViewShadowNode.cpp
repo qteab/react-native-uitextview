@@ -136,12 +136,19 @@ Size RNUITextViewShadowNode::measureContent(
     textLayoutContext.pointScaleFactor = layoutContext.pointScaleFactor;
     const auto textLayoutManager = std::make_shared<const TextLayoutManager>(getContextContainer());
         
-    return textLayoutManager->measure(
+    auto measurement = textLayoutManager->measure(
       AttributedStringBox{baseAttributedString},
       paragraphAttributes,
       textLayoutContext,
       layoutConstraints
-    ).size;
+    );
+
+    Float epsilon = 0.001; 
+
+    return Size{
+      (std::ceil((measurement.size.width + epsilon) * layoutContext.pointScaleFactor) / layoutContext.pointScaleFactor),
+      (std::ceil((measurement.size.height + epsilon) * layoutContext.pointScaleFactor) / layoutContext.pointScaleFactor)
+    };
 }
 
 void RNUITextViewShadowNode::layout(LayoutContext layoutContext) {
