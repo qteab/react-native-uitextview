@@ -79,14 +79,37 @@ using namespace facebook::react;
 
   const auto &props = *std::static_pointer_cast<RNUITextViewProps const>(_props);
 
-  const auto attrString = _state->getData().attributedString;
-  const auto convertedAttrString = RCTNSAttributedStringFromAttributedString(attrString);
+  const auto &attributedStringBox = _state->getData().attributedString;
+  
+  // Convert to iOS string (standard conversion drops baselineOffset)
+  NSAttributedString *baseString = RCTNSAttributedStringFromAttributedString(attributedStringBox);
+  NSMutableAttributedString *mutableString = [baseString mutableCopy];
 
-  _textView.attributedText = convertedAttrString;
+  // Manually re-apply baselineOffset from C++ fragments
+  int currentIndex = 0;
+  for (const auto &fragment : attributedStringBox.getFragments()) {
+      Float offset = fragment.textAttributes.baselineOffset;
+      
+      // Calculate fragment length
+      NSString *fragmentString = [NSString stringWithUTF8String:fragment.string.c_str()];
+      NSInteger length = fragmentString.length;
+      
+      // Apply offset if it exists
+      if (offset != 0 && (currentIndex + length <= mutableString.length)) {
+          [mutableString addAttribute:NSBaselineOffsetAttributeName
+                                value:@(offset)
+                                range:NSMakeRange(currentIndex, length)];
+      }
+      
+      currentIndex += length;
+  }
+
+  _textView.attributedText = mutableString;
   _textView.frame = _view.frame;
 
+  // Existing layout calculation logic
   const auto lines = new std::vector<std::string>();
-  [_textView.layoutManager enumerateLineFragmentsForGlyphRange:NSMakeRange(0, convertedAttrString.string.length) usingBlock:^(CGRect rect,
+  [_textView.layoutManager enumerateLineFragmentsForGlyphRange:NSMakeRange(0, mutableString.string.length) usingBlock:^(CGRect rect,
                                                                                               CGRect usedRect,
                                                                                               NSTextContainer * _Nonnull textContainer,
                                                                                               NSRange glyphRange,

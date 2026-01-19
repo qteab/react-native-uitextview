@@ -28,6 +28,7 @@ function UITextViewChild({
   ...rest
 }: TextProps & {
   uiTextView?: boolean
+  baselineOffset?: number
 }) {
   const [isAncestor, rootStyle] = useTextAncestorContext()
 
@@ -95,6 +96,7 @@ function UITextViewChild({
 function UITextViewInner(
   props: TextProps & {
     uiTextView?: boolean
+    baselineOffset?: number
   },
 ) {
   const [isAncestor] = useTextAncestorContext()
@@ -108,7 +110,12 @@ function UITextViewInner(
   return <UITextViewChild {...props} />
 }
 
-export function UITextView(props: TextProps & {uiTextView?: boolean}) {
+export function UITextView(
+  props: TextProps & {
+    uiTextView?: boolean
+    baselineOffset?: number
+  },
+) {
   if (Platform.OS !== 'ios') {
     return <RNText {...props} />
   }
