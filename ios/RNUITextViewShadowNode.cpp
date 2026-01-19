@@ -57,6 +57,19 @@ Size RNUITextViewShadowNode::measureContent(
         textAttributes.textShadowOffset = props.shadowOffset;
         textAttributes.textShadowRadius = props.shadowRadius;
         textAttributes.letterSpacing = props.letterSpacing;
+
+        textAttributes.baselineOffset = props.baselineOffset;
+
+        if (props.textTransform == RNUITextViewChildTextTransform::Uppercase) {
+          textAttributes.textTransform = TextTransform::Uppercase;
+        } else if (props.textTransform == RNUITextViewChildTextTransform::Lowercase) {
+          textAttributes.textTransform = TextTransform::Lowercase;
+        } else if (props.textTransform == RNUITextViewChildTextTransform::Capitalize) {
+          textAttributes.textTransform = TextTransform::Capitalize;
+        } else {
+          textAttributes.textTransform = TextTransform::None;
+        }
+        
         textAttributes.textDecorationColor = props.textDecorationColor;
         textAttributes.fontFamily = props.fontFamily;
         

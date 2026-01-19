@@ -4,6 +4,7 @@ import type {
   BubblingEventHandler,
   Int32,
   WithDefault,
+  Float,
 } from 'react-native/Libraries/Types/CodegenTypes'
 
 interface TargetedEvent {
@@ -21,8 +22,9 @@ interface NativeProps extends ViewProps {
   allowFontScaling?: WithDefault<boolean, true>
   ellipsizeMode?: WithDefault<EllipsizeMode, 'tail'>
   selectable?: boolean
-  selectionColor?: ColorValue;
+  selectionColor?: ColorValue
   onTextLayout?: BubblingEventHandler<TextLayoutEvent>
+  baselineOffset?: Float
 }
 
 export default codegenNativeComponent<NativeProps>('RNUITextView', {
