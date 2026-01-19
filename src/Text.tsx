@@ -25,8 +25,9 @@ const useTextAncestorContext = () => React.useContext(TextAncestorContext)
 function UITextViewChild({
   style,
   children,
+  baselineOffset,
   ...rest
-}: TextProps & {
+}: Omit<TextProps, 'shadowRadius'> & {
   uiTextView?: boolean
   baselineOffset?: number
 }) {
@@ -56,10 +57,11 @@ function UITextViewChild({
               return (
                 // @ts-expect-error @TODO fix this type
                 <RNUITextViewChildNativeComponent
+                  {...rest}
                   key={index}
                   style={flattenedStyle}
+                  shadowRadius={baselineOffset}
                   text={c.toString()}
-                  {...rest}
                 />
               )
             }
@@ -78,10 +80,11 @@ function UITextViewChild({
             return (
               // @ts-expect-error @TODO fix this type
               <RNUITextViewChildNativeComponent
+                {...rest}
                 key={index}
                 style={flattenedStyle}
+                shadowRadius={baselineOffset}
                 text={c.toString()}
-                {...rest}
               />
             )
           }
@@ -94,7 +97,7 @@ function UITextViewChild({
 }
 
 function UITextViewInner(
-  props: TextProps & {
+  props: Omit<TextProps, 'shadowRadius'> & {
     uiTextView?: boolean
     baselineOffset?: number
   },
@@ -111,7 +114,7 @@ function UITextViewInner(
 }
 
 export function UITextView(
-  props: TextProps & {
+  props: Omit<TextProps, 'shadowRadius'> & {
     uiTextView?: boolean
     baselineOffset?: number
   },

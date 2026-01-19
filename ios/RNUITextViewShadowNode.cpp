@@ -59,7 +59,7 @@ Size RNUITextViewShadowNode::measureContent(
         
         // Since TextAttributes doesn't have baselineOffset, we store it in textShadowRadius
         // which is also a Float. We will retrieve this in Objective-C.
-        textAttributes.textShadowRadius = props.baselineOffset; 
+        textAttributes.textShadowRadius = props.props.shadowRadius; 
         
         textAttributes.textShadowColor = props.shadowColor;
         textAttributes.textShadowOffset = props.shadowOffset;
