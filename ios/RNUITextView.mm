@@ -81,13 +81,9 @@ using namespace facebook::react;
 {
   [super layoutSubviews];
 
-  // 1. Force the inner UITextView to fill our bounds exactly
+  // Force the inner UITextView to fill our bounds exactly
   _textView.frame = self.bounds;
 
-  // 2. CRITICAL: Tell the text container exactly how wide it is.
-  //    By default, it might hold onto old values from recycled views.
-  //    We give it infinite height so it never vertically clips internally 
-  //    (allowing the parent view to clip if needed).
   CGSize containerSize = self.bounds.size;
   containerSize.height = CGFLOAT_MAX; 
   
