@@ -37,7 +37,13 @@ using namespace facebook::react;
     self.contentView = _view;
     self.clipsToBounds = false;
 
-    _textView = [[UITextView alloc] init];
+    if (@available(iOS 16.0, *)) {
+      // Explicitly opt-out of TextKit 2
+      _textView = [UITextView textViewUsingTextLayoutManager:NO];
+    } else {
+      _textView = [[UITextView alloc] init];
+    }
+
     _textView.scrollEnabled = false;
     _textView.editable = false;
     _textView.textContainerInset = UIEdgeInsetsZero;
@@ -131,7 +137,7 @@ using namespace facebook::react;
 
   CGSize containerSize = _view.frame.size;
   containerSize.height = CGFLOAT_MAX;
-  
+
   _textView.textContainer.size = containerSize;
 
   const auto lines = new std::vector<std::string>();
