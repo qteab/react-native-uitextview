@@ -35,7 +35,7 @@ using namespace facebook::react;
 
     _view = [[UIView alloc] init];
     self.contentView = _view;
-    self.clipsToBounds = true;
+    self.clipsToBounds = false;
 
     _textView = [[UITextView alloc] init];
     _textView.scrollEnabled = false;
@@ -110,6 +110,10 @@ using namespace facebook::react;
 
   _textView.attributedText = mutableString;
   _textView.frame = _view.frame;
+
+  CGSize containerSize = _view.frame.size;
+  containerSize.height = CGFLOAT_MAX;
+  _textView.textContainer.size = containerSize;
 
   const auto lines = new std::vector<std::string>();
   [_textView.layoutManager enumerateLineFragmentsForGlyphRange:NSMakeRange(0, mutableString.string.length) usingBlock:^(CGRect rect,
