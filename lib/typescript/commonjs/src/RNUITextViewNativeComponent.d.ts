@@ -10,6 +10,7 @@ type EllipsizeMode = 'head' | 'middle' | 'tail' | 'clip';
 interface NativeProps extends ViewProps {
     numberOfLines?: Int32;
     allowFontScaling?: WithDefault<boolean, true>;
+    maxFontSizeMultiplier?: Float;
     ellipsizeMode?: WithDefault<EllipsizeMode, 'tail'>;
     selectable?: boolean;
     selectionColor?: ColorValue;

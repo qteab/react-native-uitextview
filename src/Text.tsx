@@ -45,6 +45,7 @@ function UITextViewChild({
         <RNUITextViewNativeComponent
           {...textDefaults}
           {...rest}
+          maxFontSizeMultiplier={rest.maxFontSizeMultiplier ?? 0}
           // ellipsizeMode={rest.ellipsizeMode ?? rest.lineBreakMode ?? 'tail'}
           style={[flattenedStyle]}
           // @ts-expect-error Weirdness

@@ -39,6 +39,9 @@ Size RNUITextViewShadowNode::measureContent(
     Float fontSizeMultiplier = 1.0;
     if (baseProps.allowFontScaling) {
       fontSizeMultiplier = layoutContext.fontSizeMultiplier;
+      if (baseProps.maxFontSizeMultiplier > 0 && fontSizeMultiplier > baseProps.maxFontSizeMultiplier) {
+        fontSizeMultiplier = baseProps.maxFontSizeMultiplier;
+      }
     }
     
     auto baseAttributedString = AttributedString{};
