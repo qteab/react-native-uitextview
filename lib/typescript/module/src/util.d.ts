@@ -65,7 +65,10 @@ export declare function flattenStyles(rootStyle: TextStyle, style: StyleProp<Tex
     boxShadow?: ReadonlyArray<import("react-native").BoxShadowValue> | string | undefined;
     filter?: ReadonlyArray<import("react-native").FilterFunction> | string | undefined;
     mixBlendMode?: import("react-native").BlendMode | undefined;
-    experimental_backgroundImage?: ReadonlyArray<import("react-native").GradientValue> | string | undefined;
+    experimental_backgroundImage?: ReadonlyArray<import("react-native").BackgroundImageValue> | string | undefined;
+    experimental_backgroundSize?: ReadonlyArray<import("react-native").BackgroundSizeValue> | string | undefined;
+    experimental_backgroundPosition?: ReadonlyArray<import("react-native").BackgroundPositionValue> | string | undefined;
+    experimental_backgroundRepeat?: ReadonlyArray<import("react-native").BackgroundRepeatValue> | string | undefined;
     alignContent?: "flex-start" | "flex-end" | "center" | "stretch" | "space-between" | "space-around" | "space-evenly" | undefined;
     alignItems?: import("react-native").FlexAlignType | undefined;
     alignSelf?: "auto" | import("react-native").FlexAlignType | undefined;

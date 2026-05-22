@@ -10,20 +10,20 @@
     "build:ios": "react-native build-ios --scheme UitextviewExample --mode Debug --extra-params \"-sdk iphonesimulator CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ GCC_OPTIMIZATION_LEVEL=0 GCC_PRECOMPILE_PREFIX_HEADER=YES ASSETCATALOG_COMPILER_OPTIMIZATION=time DEBUG_INFORMATION_FORMAT=dwarf COMPILER_INDEX_STORE_ENABLE=NO\""
   },
   "dependencies": {
-    "react": "19.1.0",
-    "react-native": "0.81.5"
+    "react": "19.2.3",
+    "react-native": "0.85.3"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@babel/preset-env": "^7.25.3",
     "@babel/runtime": "^7.25.0",
-    "@react-native-community/cli": "15.0.1",
-    "@react-native-community/cli-platform-android": "15.0.1",
-    "@react-native-community/cli-platform-ios": "15.0.1",
-    "@react-native/babel-preset": "0.81.5",
-    "@react-native/metro-config": "0.81.5",
-    "@react-native/typescript-config": "0.81.5",
-    "@types/react": "^19.1.0"
+    "@react-native-community/cli": "^20.1.3",
+    "@react-native-community/cli-platform-android": "^20.1.3",
+    "@react-native-community/cli-platform-ios": "^20.1.3",
+    "@react-native/babel-preset": "0.85.3",
+    "@react-native/metro-config": "0.85.3",
+    "@react-native/typescript-config": "0.85.3",
+    "@types/react": "^19.2.0"
   },
   "engines": {
     "node": ">=18"
