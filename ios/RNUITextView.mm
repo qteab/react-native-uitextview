@@ -20,6 +20,7 @@ using namespace facebook::react;
   UIView * _view;
   UITextView * _textView;
   RNUITextViewShadowNode::ConcreteState::Shared _state;
+  UIEdgeInsets _contentInsets;
 }
 
 + (ComponentDescriptorProvider)componentDescriptorProvider
@@ -75,6 +76,24 @@ using namespace facebook::react;
   // Reset the frame to zero so that when it properly lays out on the next use
   _textView.frame = CGRectZero;
   _textView.attributedText = nil;
+  _contentInsets = UIEdgeInsetsZero;
+}
+
+// The content insets carry the padding (and border) that Yoga reserved around
+// our text. We mirror them onto the UITextView so the text is positioned just
+// like it would be inside a base <Text> with padding.
+- (void)updateLayoutMetrics:(const LayoutMetrics &)layoutMetrics
+           oldLayoutMetrics:(const LayoutMetrics &)oldLayoutMetrics
+{
+  [super updateLayoutMetrics:layoutMetrics oldLayoutMetrics:oldLayoutMetrics];
+
+  _contentInsets = UIEdgeInsetsMake(
+    layoutMetrics.contentInsets.top,
+    layoutMetrics.contentInsets.left,
+    layoutMetrics.contentInsets.bottom,
+    layoutMetrics.contentInsets.right);
+
+  [self setNeedsLayout];
 }
 
 - (void)layoutSubviews
@@ -84,9 +103,15 @@ using namespace facebook::react;
   // Force the inner UITextView to fill our bounds exactly
   _textView.frame = self.bounds;
 
+  // Inset the text by the padding (and border) that Yoga reserved for us. Yoga
+  // has already grown our frame to include the padding, so we just need to push
+  // the text in by that amount to mirror how <Text> handles padding.
+  _textView.textContainerInset = _contentInsets;
+
   CGSize containerSize = self.bounds.size;
-  containerSize.height = CGFLOAT_MAX; 
-  
+  containerSize.width -= (_contentInsets.left + _contentInsets.right);
+  containerSize.height = CGFLOAT_MAX;
+
   _textView.textContainer.size = containerSize;
   _textView.textContainer.widthTracksTextView = YES;
 }
@@ -130,8 +155,10 @@ using namespace facebook::react;
 
   _textView.attributedText = mutableString;
   _textView.frame = _view.frame;
+  _textView.textContainerInset = _contentInsets;
 
   CGSize containerSize = _view.frame.size;
+  containerSize.width -= (_contentInsets.left + _contentInsets.right);
   containerSize.height = CGFLOAT_MAX;
 
   _textView.textContainer.size = containerSize;
@@ -222,7 +249,13 @@ using namespace facebook::react;
 
 - (CGPoint)getLocationOfPress:(UIGestureRecognizer*)sender
 {
-  return [sender locationInView:_textView];
+  CGPoint location = [sender locationInView:_textView];
+  // The layout manager works in text container coordinates, which are offset
+  // from the text view by the container inset (our padding). Convert the touch
+  // into container space so hit testing stays accurate when padding is set.
+  location.x -= _textView.textContainerInset.left;
+  location.y -= _textView.textContainerInset.top;
+  return location;
 }
 
 - (RNUITextViewChild*)getTouchChild:(CGPoint)location
